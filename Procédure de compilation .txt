@@ -1,0 +1,60 @@
+﻿Pour compiler/flasher le stm32 avec GRBL
+1 installer l'application Atollic True Studio
+- télécharger le software Atollic True Studio (lien = https://atollic.com/resources/download/windows/windows-archive/?submissionGuid=b02850c7-47d5-45e4-a129-70da89d0b076 )
+   Le programme est gratuit mais demande de s'identifier (nom/mail)
+- lancer le programme.exe ainsi téléchargé et répondre aux questions posées en retenant les options proposées. L'installation dure plusieurs minutes.
+- lancer l'application Atollic True studio une fois l'installation terminée 
+
+2 Installer STLINK  
+Si comme moi vous utilisez un module STLINK pour flasher le programme dans le STM32, il faut peut être installer le driver pour STLINK sur le pc.
+Voici le lien d'une vidéo expliquant comment faire.
+https://www.youtube.com/watch?v=ONzRL06Umfo
+A noter que je ne suis pas sûr qu'il soit nécessaire d'installer le driver STLINK car il est peut être déjà inclus dans la version d'Atollic qui a été installée. 
+
+3 Copier le programme GRBL
+- Télecharger le GRBL software ( lien = https://github.com/yaroslavVl/6-AXIS-USBCNC-GRBL )
+- Décomprimer tous les fichiers dans un répertoire de votre choix
+
+4 Compiler le programme GRBL
+- Aller dans le répertoire où GRBL a été décompressé.
+- Double cliquer sur le fichier ".cprojet".
+- Cela devrait ouvrir le projet dans Atollic.
+Dans Atollic, sélectionner le menu Projet et puis l'option Build project.
+Si cela fonctionne une fenêtre devrait s'ouvrir montrant l'état d'avancement.
+A noter que la compilation se sera exécutée avec le set up par défaut de GRBL.
+Il est probable que vous deviez éditer 2 fichiers de set up pour l'adapter à votre machine. 
+
+5 Editer le set up
+- Dans Atollic, lorsque le projet est ouvert, afficher la liste de tous les fichiers utilisés: Cliquer sur le menu View et sélectionner l'option "Project Explorer".
+Cela devrait ajouter une fenêtre et afficher un dossier "stm32grbl11"
+- cliquer sur ce dossier pour l'ouvir; puis sur le dossier "inc".
+Il y a plusieurs fichiers mais seuls 3 fichiers peuvent être modifiés (pour adapter la config):
+- Le fichier "cpu_map.h" peut être édité pour changer l'affectation de certaines pins. 
+Attention, le fichier contient plusieurs configurations (pour un arduino, pour un STM32 avec 3 axes, pour un stm32 4 axes). 
+Par défaut, c'est un stm32 4 axes qui est actif (les autres sont grisés).
+Par rapport à la configuration par défaut, il est en principe nécessaire de changer les n° des pins DIR et STEP compte tenu du brochage prévu pour le shield (dir et step étant côte à côte pour chaque axe) 
+- Le fichier "config.h" permet de choisir un grand nombre d'options offertes par GRBL (exemple : homing, hard limits = fins de course, soft limits,  coolant, PWM , laser, ...)
+Lire soigneusement les explications données dans ce fichier
+- Le fichier "default.h" permet de préciser les valeurs par défaut d'autres paramètres de la machine (vitesse max, accélération, inversion de signaux,...).
+ A noter que les paramètres de ce fichier sont seulement des valeurs par défaut.
+ GRBL permet de modifier ces derniers paramètres sans devoir recompiler/reflasher le STM32. Cela se fait au moyen de commandes GRBL du type $xx=yyyyy.
+ Voir la doc de GRBL1.1 pour plus de détails. 
+
+6 Après avoir éditer le(s) fichiers de set up, recompiler le programme pour vérifier qu'il n'y a pas d'erreurs.
+Pour compiler, sélectionnez le menu "Projet" et puis l'option "Build project".
+
+7 Avant de flasher le programme dans le STM32, il faut avoir configuré Atollic pour utiliser le "STLINK" en mode "SWD"
+- Dans Atollic, sélectionner le menu "Run" puis l'option "Debug Configurations"
+ Cela ouvre une nouvelle fenêtre.
+- Dans la liste à gauche, choisir stm32grbl11.elf (sous Embedded C/C++ Application)
+- Dans la partie droite, sélectionner l'onglet "Debugger" et choisir comme "Debug probe" la valeur "ST-LINK" et comme "Interface" l'option "SWD".
+
+8 Flasher le programme dans le STM32.
+- Connecter le STM32 blue pill au module ST-Link. Attention le module ST-LINK a 10 pins mais seules 4 doivent être raccordées (SWDIO, GND, SWCLK et 3.3v)
+  Voici un lien : https://www.youtube.com/watch?v=KgR3uM21y7o
+- Connecter le ST-Link au pc via l'USB
+- transférer le programmme dans le blue pill en sélectionnant (dans Atollic) le menu "Run" et puis l'option "Debug".
+
+NB : Une fois le programme au point et la configuration bien définie pour R-CNC, il devrait être possible de directement fournir un fichier compilé (elf).
+Dans ce cas, l'utilisateur n'aurait pas besoin d'installer Atollic.
+Il lui suffirait d'installer et d'utiliser ST-LINK utility pour flasher le blue pill avec le module ST-Link.

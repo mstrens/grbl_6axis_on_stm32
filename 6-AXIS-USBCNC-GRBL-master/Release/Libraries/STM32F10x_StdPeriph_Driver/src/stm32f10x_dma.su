@@ -1,0 +1,11 @@
+stm32f10x_dma.c:114:6:DMA_DeInit	4	static
+stm32f10x_dma.c:208:6:DMA_Init	8	static
+stm32f10x_dma.c:265:6:DMA_StructInit	0	static
+stm32f10x_dma.c:300:6:DMA_Cmd	0	static
+stm32f10x_dma.c:332:6:DMA_ITConfig	0	static
+stm32f10x_dma.c:359:6:DMA_SetCurrDataCounter	0	static
+stm32f10x_dma.c:377:10:DMA_GetCurrDataCounter	0	static
+stm32f10x_dma.c:439:12:DMA_GetFlagStatus	0	static
+stm32f10x_dma.c:529:6:DMA_ClearFlag	0	static
+stm32f10x_dma.c:601:10:DMA_GetITStatus	0	static
+stm32f10x_dma.c:690:6:DMA_ClearITPendingBit	0	static

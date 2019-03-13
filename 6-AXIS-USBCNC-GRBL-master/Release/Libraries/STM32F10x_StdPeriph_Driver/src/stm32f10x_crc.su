@@ -1,0 +1,6 @@
+stm32f10x_crc.c:89:6:CRC_ResetDR	0	static
+stm32f10x_crc.c:100:10:CRC_CalcCRC	0	static
+stm32f10x_crc.c:113:10:CRC_CalcBlockCRC	0	static
+stm32f10x_crc.c:129:10:CRC_GetCRC	0	static
+stm32f10x_crc.c:139:6:CRC_SetIDRegister	0	static
+stm32f10x_crc.c:149:9:CRC_GetIDRegister	0	static

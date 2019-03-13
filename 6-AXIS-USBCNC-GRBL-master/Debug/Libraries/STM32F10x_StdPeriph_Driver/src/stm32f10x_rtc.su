@@ -1,0 +1,14 @@
+stm32f10x_rtc.c:96:6:RTC_ITConfig	0	static
+stm32f10x_rtc.c:117:6:RTC_EnterConfigMode	0	static
+stm32f10x_rtc.c:128:6:RTC_ExitConfigMode	0	static
+stm32f10x_rtc.c:139:10:RTC_GetCounter	4	static
+stm32f10x_rtc.c:164:6:RTC_SetCounter	0	static
+stm32f10x_rtc.c:179:6:RTC_SetPrescaler	0	static
+stm32f10x_rtc.c:197:6:RTC_SetAlarm	0	static
+stm32f10x_rtc.c:212:10:RTC_GetDivider	0	static
+stm32f10x_rtc.c:226:6:RTC_WaitForLastTask	0	static
+stm32f10x_rtc.c:242:6:RTC_WaitForSynchro	0	static
+stm32f10x_rtc.c:263:12:RTC_GetFlagStatus	0	static
+stm32f10x_rtc.c:292:6:RTC_ClearFlag	0	static
+stm32f10x_rtc.c:310:10:RTC_GetITStatus	0	static
+stm32f10x_rtc.c:337:6:RTC_ClearITPendingBit	0	static

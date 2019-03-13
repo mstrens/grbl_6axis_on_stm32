@@ -1,0 +1,2 @@
+system_stm32f10x.c:218:6:SystemInit	16	static
+system_stm32f10x.c:312:6:SystemCoreClockUpdate	0	static

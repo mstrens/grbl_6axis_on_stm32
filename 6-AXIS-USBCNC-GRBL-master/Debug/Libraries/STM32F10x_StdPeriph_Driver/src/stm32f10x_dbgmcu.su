@@ -1,0 +1,3 @@
+stm32f10x_dbgmcu.c:90:10:DBGMCU_GetREVID	0	static
+stm32f10x_dbgmcu.c:100:10:DBGMCU_GetDEVID	0	static
+stm32f10x_dbgmcu.c:140:6:DBGMCU_Config	0	static

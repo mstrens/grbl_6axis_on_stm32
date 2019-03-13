@@ -1,0 +1,11 @@
+stepper.c:301:6:st_wake_up	24	static
+stepper.c:376:6:st_go_idle	16	static
+stepper.c:462:6:TIM2_IRQHandler	24	static
+stepper.c:740:6:TIM3_IRQHandler	4	static
+stepper.c:792:6:st_generate_step_dir_invert_masks	0	static
+stepper.c:805:6:st_reset	24	static
+stepper.c:883:6:stepper_init	48	static
+stepper.c:956:6:st_update_plan_block_parameters	16	static
+stepper.c:1026:6:st_prep_buffer	104	static
+stepper.c:1438:7:st_get_realtime_rate	0	static
+stepper.c:1446:6:TIM_Configuration	32	static
