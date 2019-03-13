@@ -39,6 +39,7 @@ Lire soigneusement les explications données dans ce fichier
  A noter que les paramètres de ce fichier sont seulement des valeurs par défaut.
  GRBL permet de modifier ces derniers paramètres sans devoir recompiler/reflasher le STM32. Cela se fait au moyen de commandes GRBL du type $xx=yyyyy.
  Voir la doc de GRBL1.1 pour plus de détails. 
+A noter que c'est dans un des 3 fichiers qu'il faut préciser si on veut que le STM32 recoive ses commandes par le port USB ou par un port série.
 
 6 Après avoir éditer le(s) fichiers de set up, recompiler le programme pour vérifier qu'il n'y a pas d'erreurs.
 Pour compiler, sélectionnez le menu "Projet" et puis l'option "Build project".
