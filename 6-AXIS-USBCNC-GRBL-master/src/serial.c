@@ -35,11 +35,11 @@ void SendthreadFunction( void *);
 #ifdef STM32F103C8
 #include "stm32f10x.h"
 #include "core_cm3.h"
-#ifndef USEUSB
+//#ifndef USEUSB
 #include "stm32f10x_usart.h"
-#else
+//#else
 #include "usb_regs.h"
-#endif
+//#endif
 #endif
 
 #if !defined(STM32F103C8)
@@ -174,11 +174,11 @@ void serial_write(uint8_t data) {
   // Calculate next head
   uint8_t next_head = serial_tx_buffer_head + 1;
   #ifdef STM32F103C8
-#ifndef USEUSB
+//#ifndef USEUSB
 	USART_SendData(USART1, data);
 	while (!(USART1->SR & USART_FLAG_TXE));
     return;
-#endif
+//#endif
 #endif
   if (next_head == TX_RING_BUFFER) { next_head = 0; }
 
@@ -296,76 +296,13 @@ uint8_t serial_read()
   }
 }
 
-#ifdef AVRTARGET
-ISR(SERIAL_RX)
-{
-  uint8_t data = UDR0;
-  uint8_t next_head;
-#endif
-#ifdef WIN32
-//#define WINLOG
-void RecvthreadFunction(void *pVoid )
-{
-    DWORD  dwBytesRead;
-    uint8_t data;
-    uint8_t next_head;
-    for (;;)
-    {
-        if (hSerial != INVALID_HANDLE_VALUE)
-        {
-            if (ReadFile(hSerial, &data, 1, &dwBytesRead, NULL) && dwBytesRead == 1)
-            {
-            }
-            else
-            {
-#ifdef WIN32
-								Sleep(1);
-#endif
+// store one received byte into Rx buffer or handle if it is a realtime command
+void storeHandleDataIn(uint8_t data){
 
-                data = 0;
-            }
-        }
-        else
-        {
-            while (_kbhit() == 0)
-                ;
-            data = _getch();
-        }
-         if (data == 0)
-             continue;
-#endif
-#ifdef STM32F103C8
-#ifdef USEUSB
-void OnUsbDataRx(uint8_t* dataIn, uint8_t length)
-{
-	//lcd_write_char(*dataIn);
-	uint8_t next_head;
-    uint8_t data;
-
-	// Write data to buffer unless it is full.
-	while (length != 0)
-	{
-        data = *dataIn ++;
-#else
-/*----------------------------------------------------------------------------
-  USART1_IRQHandler
-  Handles USART1 global interrupt request.
- *----------------------------------------------------------------------------*/
-void USART1_IRQHandler (void) 
-{
-    volatile unsigned int IIR;
-    uint8_t data;
-    uint8_t next_head;
-
-    IIR = USART1->SR;
-    if (IIR & USART_FLAG_RXNE) 
-    {                  // read interrupt
-        data = USART1->DR & 0x1FF;
-#endif
-#endif
   // Pick off realtime command characters directly from the serial stream. These characters are
   // not passed into the main buffer, but these set system state flag bits for realtime execution.
-  switch (data) {
+	uint8_t next_head;
+	switch (data) {
     case CMD_RESET:         mc_reset(); break; // Call motion control reset routine.
     case CMD_STATUS_REPORT: system_set_exec_state_flag(EXEC_STATUS_REPORT); break; // Set as true
     case CMD_CYCLE_START:   system_set_exec_state_flag(EXEC_CYCLE_START); break; // Set as true
@@ -374,11 +311,11 @@ void USART1_IRQHandler (void)
       if (data > 0x7F) { // Real-time control characters are extended ACSII only.
         switch(data) {
           case CMD_SAFETY_DOOR:   system_set_exec_state_flag(EXEC_SAFETY_DOOR); break; // Set as true
-          case CMD_JOG_CANCEL:   
+          case CMD_JOG_CANCEL:
             if (sys.state & STATE_JOG) { // Block all other states from invoking motion cancel.
-              system_set_exec_state_flag(EXEC_MOTION_CANCEL); 
+              system_set_exec_state_flag(EXEC_MOTION_CANCEL);
             }
-            break; 
+            break;
           #ifdef DEBUG
             case CMD_DEBUG_REPORT: {uint8_t sreg = SREG; cli(); bit_true(sys_rt_exec_debug,EXEC_DEBUG_REPORT); SREG = sreg;} break;
           #endif
@@ -413,18 +350,84 @@ void USART1_IRQHandler (void)
         }
       }
   }
-#ifdef WIN32
-    }
-#endif
-#ifdef STM32F103C8
-#ifndef USEUSB
-        USART1->SR &= ~USART_FLAG_RXNE;	          // clear interrupt
-#else
-    length--;
-#endif
-   }
-#endif
 }
+
+#ifdef AVRTARGET
+ISR(SERIAL_RX)
+{
+  uint8_t data = UDR0;
+  storeHandleDataIn(data);
+}
+#endif
+
+#ifdef WIN32
+//#define WINLOG
+void RecvthreadFunction(void *pVoid )
+{
+    DWORD  dwBytesRead;
+    uint8_t data;
+    uint8_t next_head;
+    for (;;)
+    {
+        if (hSerial != INVALID_HANDLE_VALUE)
+        {
+            if (ReadFile(hSerial, &data, 1, &dwBytesRead, NULL) && dwBytesRead == 1)
+            {
+            }
+            else
+            {
+			Sleep(1);
+                data = 0;
+            }
+        }
+        else
+        {
+            while (_kbhit() == 0)
+                ;
+            data = _getch();
+        }
+         if (data == 0)  continue;
+         storeHandleDataIn(data);
+    }
+}
+#endif
+
+#ifdef STM32F103C8
+//#ifdef USEUSB
+void OnUsbDataRx(uint8_t* dataIn, uint8_t length)
+{
+	//lcd_write_char(*dataIn);
+	//uint8_t next_head;
+    uint8_t data;
+
+	// Write data to buffer unless it is full.
+	while (length != 0)
+	{
+        data = *dataIn ++;
+        storeHandleDataIn(data);
+        length--;
+	}
+}
+//#else // end of USEUSB
+/*----------------------------------------------------------------------------
+  USART1_IRQHandler
+  Handles USART1 global interrupt request.
+ *----------------------------------------------------------------------------*/
+void USART1_IRQHandler (void) 
+{
+    volatile unsigned int IIR;
+    uint8_t data;
+    IIR = USART1->SR;
+    if (IIR & USART_FLAG_RXNE) 
+    {                  // read interrupt
+        data = USART1->DR & 0x1FF;
+        storeHandleDataIn(data);
+        USART1->SR &= ~USART_FLAG_RXNE;	          // clear interrupt
+    }
+}
+//#endif  // end of USEUSB
+#endif  // end of STM32STM32F103C8
+
 
 void serial_reset_read_buffer()
 {

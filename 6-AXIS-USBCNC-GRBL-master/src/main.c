@@ -35,15 +35,15 @@ volatile uint8_t sys_rt_exec_debug;
 
 #if defined (STM32F103C8)
 #include "usb_lib.h"
-#ifdef USEUSB
+//#ifdef USEUSB
 #include "usb_desc.h"
-#endif
+//#endif
 #include "hw_config.h"
-#ifdef USEUSB
+//#ifdef USEUSB
 #include "usb_pwr.h"
-#endif
+//#endif
 #include "stm32eeprom.h"
-#ifndef USEUSB
+//#ifndef USEUSB
 #include "stm32f10x_usart.h"
 void USART1_Configuration(u32 BaudRate)
 {
@@ -78,7 +78,7 @@ void USART1_Configuration(u32 BaudRate)
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	USART_Cmd(USART1, ENABLE);
 }
-#endif
+//#endif
 
 #endif
 
@@ -101,13 +101,13 @@ int main(void)
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 #endif
 	//Set_System();
-#ifndef USEUSB
+//#ifndef USEUSB
 	USART1_Configuration(115200);
-#else
+//#else
 	Set_USBClock();
 	USB_Interrupts_Config();
 	USB_Init();
-#endif
+//#endif
 
 #ifndef NOEEPROMSUPPORT
 	FLASH_Unlock();
