@@ -1,3 +1,4 @@
+main.c:48:6:USART1_Configuration	48	static
 main.c:89:5:main	48	static
 main.c:193:6:_delay_ms	8	static
 main.c:206:6:LedBlink	8	static

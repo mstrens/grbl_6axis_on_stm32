@@ -12,4 +12,4 @@ report.c:352:6:report_startup_line	16	static
 report.c:361:6:report_execute_startup_message	16	static
 report.c:370:6:report_build_info	8	static
 report.c:449:6:report_echo_line_received	8	static
-report.c:461:6:report_realtime_status	72	static
+report.c:461:6:report_realtime_status	64	static

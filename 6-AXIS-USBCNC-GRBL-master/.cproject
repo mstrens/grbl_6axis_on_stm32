@@ -48,8 +48,8 @@
 									<listOptionValue builtIn="false" value="_GRBL_"/>
 									<listOptionValue builtIn="false" value="STM32F103C8T6"/>
 									<listOptionValue builtIn="false" value="LEDBLINK"/>
-									<listOptionValue builtIn="false" value="USEUSB"/>
 									<listOptionValue builtIn="false" value="STM32F103C8"/>
+									<listOptionValue builtIn="false" value="USEUSBX"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.1229813592" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>

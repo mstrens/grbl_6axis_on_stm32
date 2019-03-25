@@ -2,5 +2,5 @@ limits.c:33:6:limits_init	32	static
 limits.c:111:6:limits_disable	0	static
 limits.c:126:9:limits_get_state	8	static
 limits.c:167:6:EXTI15_10_IRQHandler	8	static
-limits.c:255:6:limits_go_home	120	static
+limits.c:255:6:limits_go_home	96	static
 limits.c:451:6:limits_soft_check	8	static
