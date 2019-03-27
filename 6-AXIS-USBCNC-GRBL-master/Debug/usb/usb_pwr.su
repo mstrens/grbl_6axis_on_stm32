@@ -1,5 +1,5 @@
 usb_pwr.c:53:8:PowerOn	16	static
-usb_pwr.c:85:8:PowerOff	16	static
-usb_pwr.c:111:6:Suspend	0	static
-usb_pwr.c:148:6:Resume_Init	8	static
-usb_pwr.c:191:6:Resume	16	static
+usb_pwr.c:85:8:PowerOff	8	static
+usb_pwr.c:111:6:Suspend	16	static
+usb_pwr.c:148:6:Resume_Init	16	static
+usb_pwr.c:191:6:Resume	24	static

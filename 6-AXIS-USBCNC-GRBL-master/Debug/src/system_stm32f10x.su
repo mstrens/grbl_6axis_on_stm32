@@ -1,2 +1,4 @@
-system_stm32f10x.c:218:6:SystemInit	16	static
-system_stm32f10x.c:312:6:SystemCoreClockUpdate	0	static
+system_stm32f10x.c:218:6:SystemInit	8	static
+system_stm32f10x.c:312:6:SystemCoreClockUpdate	24	static
+system_stm32f10x.c:425:13:SetSysClock	8	static
+system_stm32f10x.c:993:13:SetSysClockTo72	16	static

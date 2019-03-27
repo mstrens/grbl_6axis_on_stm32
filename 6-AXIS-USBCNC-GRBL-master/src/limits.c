@@ -64,6 +64,7 @@ void limits_init()
 
 	if (bit_istrue(settings.flags, BITFLAG_HARD_LIMIT_ENABLE))
 	{
+		delay_ms(100);                                      // added by MS for debug
 		GPIO_EXTILineConfig(GPIO_LIMIT_PORT, X_LIMIT_BIT);
 		GPIO_EXTILineConfig(GPIO_LIMIT_PORT, Y_LIMIT_BIT);
 		GPIO_EXTILineConfig(GPIO_LIMIT_PORT, Z_LIMIT_BIT);
@@ -91,6 +92,11 @@ void limits_init()
 
 		EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 		EXTI_Init(&EXTI_InitStructure);
+
+		//EXTI_ClearITPendingBit(1 << X_LIMIT_BIT); // added by Ms
+		//EXTI_ClearITPendingBit(1 << Y_LIMIT_BIT); // added by Ms
+		//EXTI_ClearITPendingBit(1 << Z_LIMIT_BIT); // added by Ms
+		//NVIC_ClearPendingIRQ(EXTI15_10_IRQn);	 // added by Ms
 
 		NVIC_InitTypeDef NVIC_InitStructure;
 		NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn; //Enable keypad external interrupt channel
@@ -216,6 +222,7 @@ void EXTI15_10_IRQHandler(void)
         system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
       }
 #else
+      //printString("mc reset in irq 10 15 handling line 224"); //added by MS to debug
       mc_reset(); // Initiate system kill.
       system_set_exec_alarm(EXEC_ALARM_HARD_LIMIT); // Indicate hard limit critical event
 #endif
@@ -373,7 +380,8 @@ void limits_go_home(uint8_t cycle_mask)
         // Homing failure condition: Limit switch not found during approach.
         if (approach && (rt_exec & EXEC_CYCLE_STOP)) { system_set_exec_alarm(EXEC_ALARM_HOMING_FAIL_APPROACH); }
         if (sys_rt_exec_alarm) {
-          mc_reset(); // Stop motors, if they are running.
+        	//printString("mc reset in homing line 382"); //added by MS to debug
+        	mc_reset(); // Stop motors, if they are running.
           protocol_execute_realtime();
           return;
         } else {
@@ -462,6 +470,7 @@ void limits_soft_check(float *target)
         if (sys.abort) { return; }
       } while ( sys.state != STATE_IDLE );
     }
+    //printString("mc reset in soft check handling line 472"); //added by MS to debug
     mc_reset(); // Issue system reset and ensure spindle and coolant are shutdown.
     system_set_exec_alarm(EXEC_ALARM_SOFT_LIMIT); // Indicate soft limit critical event
     protocol_execute_realtime(); // Execute to enter critical event loop and system abort

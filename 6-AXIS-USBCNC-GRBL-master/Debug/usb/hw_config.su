@@ -1,7 +1,8 @@
-hw_config.c:34:6:Set_System	0	static
+hw_config.c:34:6:Set_System	4	static
 hw_config.c:41:6:Set_USBClock	8	static
-hw_config.c:53:6:Enter_LowPowerMode	0	static
-hw_config.c:62:6:Leave_LowPowerMode	0	static
+hw_config.c:53:6:Enter_LowPowerMode	4	static
+hw_config.c:62:6:Leave_LowPowerMode	16	static
 hw_config.c:81:6:USB_Interrupts_Config	16	static
-hw_config.c:97:6:USB_Cable_Config	0	static
-hw_config.c:104:6:Get_SerialNum	4	static
+hw_config.c:97:6:USB_Cable_Config	16	static
+hw_config.c:104:6:Get_SerialNum	24	static
+hw_config.c:124:13:IntToUnicode	32	static

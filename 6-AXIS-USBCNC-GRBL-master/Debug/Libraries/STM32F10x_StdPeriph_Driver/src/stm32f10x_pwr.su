@@ -1,9 +1,9 @@
 stm32f10x_pwr.c:118:6:PWR_DeInit	8	static
-stm32f10x_pwr.c:130:6:PWR_BackupAccessCmd	0	static
-stm32f10x_pwr.c:143:6:PWR_PVDCmd	0	static
-stm32f10x_pwr.c:164:6:PWR_PVDLevelConfig	0	static
-stm32f10x_pwr.c:184:6:PWR_WakeUpPinCmd	0	static
-stm32f10x_pwr.c:203:6:PWR_EnterSTOPMode	4	static
-stm32f10x_pwr.c:242:6:PWR_EnterSTANDBYMode	0	static
-stm32f10x_pwr.c:267:12:PWR_GetFlagStatus	0	static
-stm32f10x_pwr.c:293:6:PWR_ClearFlag	0	static
+stm32f10x_pwr.c:130:6:PWR_BackupAccessCmd	16	static
+stm32f10x_pwr.c:143:6:PWR_PVDCmd	16	static
+stm32f10x_pwr.c:164:6:PWR_PVDLevelConfig	24	static
+stm32f10x_pwr.c:184:6:PWR_WakeUpPinCmd	16	static
+stm32f10x_pwr.c:203:6:PWR_EnterSTOPMode	24	static
+stm32f10x_pwr.c:242:6:PWR_EnterSTANDBYMode	4	static
+stm32f10x_pwr.c:267:12:PWR_GetFlagStatus	24	static
+stm32f10x_pwr.c:293:6:PWR_ClearFlag	16	static

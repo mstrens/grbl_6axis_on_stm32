@@ -1,4 +1,3 @@
-usb_endp.c:51:6:EP1_IN_Callback.part.0	24	static
-usb_endp.c:34:6:EP3_OUT_Callback	8	static
-usb_endp.c:51:6:EP1_IN_Callback	0	static
-usb_endp.c:157:6:SOF_Callback	0	static
+usb_endp.c:34:6:EP3_OUT_Callback	16	static
+usb_endp.c:51:6:EP1_IN_Callback	40	static
+usb_endp.c:157:6:SOF_Callback	8	static

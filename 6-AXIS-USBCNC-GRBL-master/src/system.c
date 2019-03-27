@@ -82,6 +82,7 @@ void system_init()
 uint8_t system_control_get_state()
 {
   uint8_t control_state = 0;
+//printString("get control state\n"); // added by ms for debug
 #ifdef AVRTARGET
   uint8_t pin = (CONTROL_PIN & CONTROL_MASK);
 #endif
@@ -91,17 +92,28 @@ uint8_t system_control_get_state()
 #ifdef STM32F103C8
   uint16_t pin= GPIO_ReadInputData(CONTROL_PIN_PORT);
 #endif
+  //print_uint8_base2_ndigit((uint8_t) pin,8); // added by MS for debug
+  //printString(" < pin b\n");         // added by MS for debug
+
   #ifdef INVERT_CONTROL_PIN_MASK
     pin ^= INVERT_CONTROL_PIN_MASK;
   #endif
+    //print_uint8_base2_ndigit((uint8_t) pin,8); // added by MS for debug
+    //printString(" < pin after\n");         // added by MS for debug
+
   if (pin) {
     #ifdef ENABLE_SAFETY_DOOR_INPUT_PIN
-      if (bit_isfalse(pin,(1<<CONTROL_SAFETY_DOOR_BIT))) { control_state |= CONTROL_PIN_INDEX_SAFETY_DOOR; }
+      if (bit_isfalse(pin,(1<<CONTROL_SAFETY_DOOR_BIT))) {
+    	  control_state |= CONTROL_PIN_INDEX_SAFETY_DOOR;
+    //	  printString("door activated\n"); // added by ms for debug
+      }
     #endif
     if (bit_isfalse(pin,(1<<CONTROL_RESET_BIT))) { control_state |= CONTROL_PIN_INDEX_RESET; }
     if (bit_isfalse(pin,(1<<CONTROL_FEED_HOLD_BIT))) { control_state |= CONTROL_PIN_INDEX_FEED_HOLD; }
     if (bit_isfalse(pin,(1<<CONTROL_CYCLE_START_BIT))) { control_state |= CONTROL_PIN_INDEX_CYCLE_START; }
   }
+  //print_uint8_base2_ndigit(control_state,8); // added by MS for debug
+  //printString(" < control state\n");         // added by MS for debug
   return(control_state);
 }
 
@@ -134,11 +146,13 @@ ISR(CONTROL_INT_vect)
 void EXTI9_5_IRQHandler(void)
 {
     EXTI_ClearITPendingBit((1 << CONTROL_RESET_BIT) | (1 << CONTROL_FEED_HOLD_BIT) | (1 << CONTROL_CYCLE_START_BIT) | (1 << CONTROL_SAFETY_DOOR_BIT));
-	uint8_t pin = system_control_get_state();
+    //printString("enter interrupt 9 5\n"); // added by ms for debug
+    uint8_t pin = system_control_get_state();
 	if (pin) 
 	{ 
 		if (bit_istrue(pin,CONTROL_PIN_INDEX_RESET)) 
 		{
+			//printString("mc reset in irq 9 5 handling"); //added by MS to debug
 			mc_reset();
 		}
 		else if (bit_istrue(pin, CONTROL_PIN_INDEX_CYCLE_START))

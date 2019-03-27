@@ -1,6 +1,8 @@
-limits.c:33:6:limits_init	32	static
-limits.c:111:6:limits_disable	0	static
-limits.c:126:9:limits_get_state	8	static
-limits.c:167:6:EXTI15_10_IRQHandler	8	static
-limits.c:255:6:limits_go_home	96	static
-limits.c:451:6:limits_soft_check	8	static
+core_cm3.h:943:22:NVIC_DisableIRQ	16	static
+core_cm3.h:984:22:NVIC_ClearPendingIRQ	16	static
+limits.c:33:6:limits_init	24	static
+limits.c:117:6:limits_disable	8	static
+limits.c:132:9:limits_get_state	16	static
+limits.c:173:6:EXTI15_10_IRQHandler	8	static
+limits.c:262:6:limits_go_home	88	static
+limits.c:459:6:limits_soft_check	16	static
