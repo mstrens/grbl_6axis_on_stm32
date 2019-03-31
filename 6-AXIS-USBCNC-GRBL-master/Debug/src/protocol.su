@@ -1,6 +1,8 @@
 protocol.c:41:6:protocol_main_loop	16	static
-protocol.c:190:6:protocol_buffer_synchronize	8	static
-protocol.c:207:6:protocol_auto_cycle_start	8	static
-protocol.c:226:6:protocol_execute_realtime	8	static
-protocol.c:263:6:protocol_exec_rt_system	16	static
-protocol.c:557:13:protocol_exec_rt_suspend	24	static
+protocol.c:191:6:protocol_buffer_synchronize	8	static
+protocol.c:208:6:protocol_auto_cycle_start	8	static
+protocol.c:227:6:protocol_execute_realtime	8	static
+protocol.c:264:6:protocol_exec_rt_system	16	static
+protocol.c:558:13:protocol_exec_rt_suspend	24	static
+protocol.c:817:6:toggleFloodBit	8	static
+protocol.c:825:6:toggleMistBit	8	static

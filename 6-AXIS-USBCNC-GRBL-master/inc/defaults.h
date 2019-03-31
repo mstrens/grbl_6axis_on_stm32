@@ -529,9 +529,9 @@
 #endif
 
 #ifdef ABC_AXIS_EXAMPLE
-		#define DEFAULT_X_STEPS_PER_MM 5120.0f					// X axis step per mm // 400
-		#define DEFAULT_Y_STEPS_PER_MM 5120.0f					// Y axis step per mm
-		#define DEFAULT_Z_STEPS_PER_MM 5120.0f					// Z axis step per mm
+		#define DEFAULT_X_STEPS_PER_MM 120.0f					// X axis step per mm // 400
+		#define DEFAULT_Y_STEPS_PER_MM 120.0f					// Y axis step per mm
+		#define DEFAULT_Z_STEPS_PER_MM 120.0f					// Z axis step per mm
 #if defined(AA_AXIS) || defined(AB_AXIS) || defined(ABC_AXIS)
 		#define DEFAULT_A_STEPS_PER_MM 5120.0f					// A axis step per mm
 #endif
@@ -553,9 +553,9 @@
 #if defined(ABC_AXIS)
 		#define DEFAULT_C_MAX_RATE 2000.0f 						// C axis mm/min
 #endif
-		#define DEFAULT_X_ACCELERATION (8000.0f*60*60) 			// X axis 10*60*60 mm/min^2 = 10 mm/sec^2 // 45
-		#define DEFAULT_Y_ACCELERATION (8000.0f*60*60) 			// Y axis 10*60*60 mm/min^2 = 10 mm/sec^2
-		#define DEFAULT_Z_ACCELERATION (8000.0f*60*60) 			// Z axis 10*60*60 mm/min^2 = 10 mm/sec^2
+		#define DEFAULT_X_ACCELERATION (400.0f) 			// X axis 10*60*60 mm/min^2 = 10 mm/sec^2 // 45
+		#define DEFAULT_Y_ACCELERATION (400.0f) 			// Y axis 10*60*60 mm/min^2 = 10 mm/sec^2
+		#define DEFAULT_Z_ACCELERATION (400.0f) 			// Z axis 10*60*60 mm/min^2 = 10 mm/sec^2
 #if defined(AA_AXIS) || defined(AB_AXIS) || defined(ABC_AXIS)
 		#define DEFAULT_A_ACCELERATION (8000.0f*60*60) 			// A axis 10*60*60 mm/min^2 = 10 mm/sec^2
 #endif

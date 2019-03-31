@@ -58,6 +58,11 @@ uint8_t serial_tx_buffer[TX_RING_BUFFER];
 uint8_t serial_tx_buffer_head = 0;
 volatile uint8_t serial_tx_buffer_tail = 0;
 
+//uint8_t serial_tx_buffer_uart[TX_RING_BUFFER];  // added by MS
+//uint8_t serial_tx_buffer_head_uart = 0;         // added by MS
+//volatile uint8_t serial_tx_buffer_tail_uart = 0;// added by MS
+
+
 
 // Returns the number of bytes available in the RX serial buffer.
 uint8_t serial_get_rx_buffer_available()
@@ -86,6 +91,7 @@ uint8_t serial_get_tx_buffer_count()
   if (serial_tx_buffer_head >= ttail) { return(serial_tx_buffer_head-ttail); }
   return (TX_RING_BUFFER - (ttail-serial_tx_buffer_head));
 }
+
 
 
 void serial_init()
@@ -204,6 +210,14 @@ void serial_write(uint8_t data) {
   // Enable Data Register Empty Interrupt to make sure tx-streaming is running
   UCSR0B |=  (1 << UDRIE0);
 #endif
+#ifdef STM32F103C8                   // added by MS
+#ifndef USEUSB                       // added by MS
+//  if (tx_restart) {                 // added by MS              // If transmit interrupt is disabled, enable it
+//      tx_restart = 0;                // added by MS
+//  	USART1->CR1 |= USART_FLAG_TXE;   // added by MS		          // enable TX interrupt
+//    }                                // added by MS
+#endif                               // added by MS
+#endif                               // added by MS
 }
 
 #ifdef AVRTARGET
@@ -418,7 +432,7 @@ void USART1_IRQHandler (void)
 #endif
 #ifdef STM32F103C8
 #ifndef USEUSB
-        USART1->SR &= ~USART_FLAG_RXNE;	          // clear interrupt
+   USART1->SR &= ~USART_FLAG_RXNE;	          // clear interrupt
 #else
     length--;
 #endif

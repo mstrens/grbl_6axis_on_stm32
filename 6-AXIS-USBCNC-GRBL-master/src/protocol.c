@@ -76,8 +76,9 @@ void protocol_main_loop()
   uint8_t char_counter = 0;
   uint8_t c;
   for (;;) {
+	  toggleFloodBit(); // added by MS for debug
 
-    // Process one line of incoming serial data, as the data becomes available. Performs an
+	  // Process one line of incoming serial data, as the data becomes available. Performs an
     // initial filtering by removing spaces and comments and capitalizing all letters.
     while((c = serial_read()) != SERIAL_NO_DATA) {
       if ((c == '\n') || (c == '\r')) { // End of line reached
@@ -810,4 +811,21 @@ static void protocol_exec_rt_suspend()
     protocol_exec_rt_system();
 
   }
+}
+
+
+void toggleFloodBit() {
+	if ( bit_istrue( GPIO_ReadOutputData(COOLANT_FLOOD_PORT) , (1 << COOLANT_FLOOD_BIT) ) ) {
+		GPIO_ResetBits(COOLANT_FLOOD_PORT,1 << COOLANT_FLOOD_BIT);
+	} else {
+		GPIO_SetBits(COOLANT_FLOOD_PORT,1 << COOLANT_FLOOD_BIT);
+	}
+}
+
+void toggleMistBit() {
+	if ( bit_istrue( GPIO_ReadOutputData(COOLANT_MIST_PORT) , (1 << COOLANT_MIST_BIT) ) ) {
+		GPIO_ResetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT);
+	} else {
+		GPIO_SetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT);
+	}
 }

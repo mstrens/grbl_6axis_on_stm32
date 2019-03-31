@@ -1,8 +1,8 @@
-serial.c:63:9:serial_get_rx_buffer_available	16	static
-serial.c:73:9:serial_get_rx_buffer_count	16	static
-serial.c:83:9:serial_get_tx_buffer_count	16	static
-serial.c:91:6:serial_init	4	static
-serial.c:173:6:serial_write	24	static
-serial.c:283:9:serial_read	16	static
-serial.c:354:6:USART1_IRQHandler	16	static
-serial.c:429:6:serial_reset_read_buffer	4	static
+serial.c:68:9:serial_get_rx_buffer_available	16	static
+serial.c:78:9:serial_get_rx_buffer_count	16	static
+serial.c:88:9:serial_get_tx_buffer_count	16	static
+serial.c:97:6:serial_init	4	static
+serial.c:179:6:serial_write	24	static
+serial.c:297:9:serial_read	16	static
+serial.c:368:6:USART1_IRQHandler	16	static
+serial.c:443:6:serial_reset_read_buffer	4	static

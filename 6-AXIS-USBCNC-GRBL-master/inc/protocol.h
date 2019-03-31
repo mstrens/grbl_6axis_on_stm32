@@ -56,4 +56,6 @@ void protocol_auto_cycle_start();
 // Block until all buffered steps are executed
 void protocol_buffer_synchronize();
 
+void toggleFloodBit() ; // added by MS for debug
+
 #endif

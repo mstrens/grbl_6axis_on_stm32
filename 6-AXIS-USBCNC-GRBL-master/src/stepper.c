@@ -489,6 +489,7 @@ void Timer1Proc()
   //GPIO_Write(DIRECTION_PORT, (GPIO_ReadOutputData(DIRECTION_PORT) & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK));
   DIRECTION_PORT->ODR = ((DIRECTION_PORT->ODR & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK));
   TIM3->SR = ~( TIM_SR_UIF | TIM_SR_CC1IF);
+  GPIO_ResetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS for debug
 #endif
 
 
@@ -721,6 +722,7 @@ void Timer1Proc()
   }
 
   st.step_outbits ^= step_port_invert_mask;  // Apply step port invert mask
+  GPIO_SetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS to debug
   busy = false;
 }
 

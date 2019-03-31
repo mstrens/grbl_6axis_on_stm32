@@ -45,6 +45,7 @@ volatile uint8_t sys_rt_exec_debug;
 #include "stm32eeprom.h"
 #ifndef USEUSB
 #include "stm32f10x_usart.h"
+uint8_t tx_restart = 1;  // added by MS; 1 means that the tx buffer is empty and so writing a byte in the buffer has to activate Tx interrupt
 void USART1_Configuration(u32 BaudRate)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -77,6 +78,7 @@ void USART1_Configuration(u32 BaudRate)
 	//	USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	USART_Cmd(USART1, ENABLE);
+	tx_restart = 1; // 1 means that Tx interrupt has to be restarted when a (first) byte will be added in the tx buffer
 }
 #endif
 
