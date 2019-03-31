@@ -21,6 +21,9 @@
 
 #include "grbl.h"
 
+#define DEBUG_TIMING_WITH_FLOOD_AND_MIST // this option toogle Flood output on each entry in protocol main loop and set a pulse while in interrupt (in stepper) to generate the step/dir signals
+// this allow to check the timing with a digital scope.
+
 // Define line flags. Includes comment type tracking and line overflow detection.
 #define LINE_FLAG_OVERFLOW bit(0)
 #define LINE_FLAG_COMMENT_PARENTHESES bit(1)
@@ -76,8 +79,9 @@ void protocol_main_loop()
   uint8_t char_counter = 0;
   uint8_t c;
   for (;;) {
+#ifdef DEBUG_TIMING_WITH_FLOOD_AND_MIST
 	  toggleFloodBit(); // added by MS for debug
-
+#endif
 	  // Process one line of incoming serial data, as the data becomes available. Performs an
     // initial filtering by removing spaces and comments and capitalizing all letters.
     while((c = serial_read()) != SERIAL_NO_DATA) {
@@ -822,6 +826,8 @@ void toggleFloodBit() {
 	}
 }
 
+
+#ifdef DEBUG_TIMING_WITH_FLOOD_AND_MIST
 void toggleMistBit() {
 	if ( bit_istrue( GPIO_ReadOutputData(COOLANT_MIST_PORT) , (1 << COOLANT_MIST_BIT) ) ) {
 		GPIO_ResetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT);
@@ -829,3 +835,4 @@ void toggleMistBit() {
 		GPIO_SetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT);
 	}
 }
+#endif
