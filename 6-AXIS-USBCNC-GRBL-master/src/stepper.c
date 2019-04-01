@@ -489,7 +489,6 @@ void Timer1Proc()
   //GPIO_Write(DIRECTION_PORT, (GPIO_ReadOutputData(DIRECTION_PORT) & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK));
   DIRECTION_PORT->ODR = ((DIRECTION_PORT->ODR & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK));
   TIM3->SR = ~( TIM_SR_UIF | TIM_SR_CC1IF);
-  GPIO_ResetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS for debug
 #endif
 
 
@@ -506,9 +505,16 @@ void Timer1Proc()
     #ifdef STEP_PULSE_DELAY
       st.step_bits = st.step_outbits; // Store out_bits to prevent overwriting.
     #else  // Normal operation
+		#ifdef DEBUG_TIMING_WITH_FLOOD_AND_MIST
+        if (st.step_outbits && (1<< X_STEP_BIT) ) {
+        	GPIO_ResetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS for debug
+		}
+        #endif
+
       STEP_PORT->ODR = ((STEP_PORT->ODR & ~STEP_MASK) | st.step_outbits);
       //GPIO_Write(STEP_PORT, (GPIO_ReadOutputData(STEP_PORT) & ~STEP_MASK) | st.step_outbits);
-    #endif
+
+      #endif
 #endif
 
 
@@ -722,7 +728,6 @@ void Timer1Proc()
   }
 
   st.step_outbits ^= step_port_invert_mask;  // Apply step port invert mask
-  GPIO_SetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS to debug
   busy = false;
 }
 
@@ -761,6 +766,10 @@ void Timer0Proc()
 		TIM3->CR1 &= ~TIM_CR1_CEN;
 		TIM3->SR = ~(TIM_SR_UIF | TIM_SR_CC1IF); // clear UIF flag
 		TIM3->CNT = 0;
+#ifdef DEBUG_TIMING_WITH_FLOOD_AND_MIST
+  GPIO_SetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS to debug
+#endif
+
 	}
 #endif
 
@@ -922,6 +931,10 @@ void stepper_init()
 	NVIC_SetPriority(TIM2_IRQn, 1);
 	NVIC_EnableIRQ(TIM3_IRQn);
 	NVIC_EnableIRQ(TIM2_IRQn);
+#ifdef DEBUG_TIMING_WITH_FLOOD_AND_MIST
+  GPIO_SetBits(COOLANT_MIST_PORT,1 << COOLANT_MIST_BIT); // added by MS to debug
+#endif
+
 #endif
 #ifdef AVRTARGET
   STEP_DDR |= STEP_MASK;
