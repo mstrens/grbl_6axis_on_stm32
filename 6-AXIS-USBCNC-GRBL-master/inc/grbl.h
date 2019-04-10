@@ -80,7 +80,7 @@ void _delay_us(uint32_t x);
 typedef int bool;
 //#define NOEEPROMSUPPORT
 #define printPgmString printString
-//#define DEBUG_TIMING_WITH_FLOOD_AND_MIST // this option toogle Flood output on each entry in protocol main loop and set a pulse while in interrupt (in stepper) to generate the step/dir signals
+#define DEBUG_TIMING_WITH_FLOOD_AND_MIST // this option toogle Flood output on each entry in protocol main loop and set a pulse while in interrupt (in stepper) to generate the step/dir signals
                        // this allow to check the timing with a digital scope.
 
 #endif

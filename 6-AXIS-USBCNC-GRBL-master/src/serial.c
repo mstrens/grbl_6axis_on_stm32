@@ -330,6 +330,7 @@ void storeHandleDataIn(uint8_t data){
           case CMD_JOG_CANCEL:
             if (sys.state & STATE_JOG) { // Block all other states from invoking motion cancel.
               system_set_exec_state_flag(EXEC_MOTION_CANCEL);
+              //printString("set EMC\n");                      // added by MS to debug
             }
             break;
           #ifdef DEBUG

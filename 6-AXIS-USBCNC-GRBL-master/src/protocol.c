@@ -437,7 +437,12 @@ void protocol_exec_rt_system()
         // Motion complete. Includes CYCLE/JOG/HOMING states and jog cancel/motion cancel/soft limit events.
         // NOTE: Motion and jog cancel both immediately return to idle after the hold completes.
         if (sys.suspend & SUSPEND_JOG_CANCEL) {   // For jog cancel, flush buffers and sync positions.
-          sys.step_control = STEP_CONTROL_NORMAL_OP;
+        	//print_uint8_base2_ndigit(sys_rt_exec_alarm,8);    // added by MS to debug
+        	printString("end of jog cancel\n");                      // added by MS to debug
+
+
+
+        	sys.step_control = STEP_CONTROL_NORMAL_OP;
           plan_reset();
           st_reset();
           gc_sync_position();

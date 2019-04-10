@@ -3,6 +3,6 @@ protocol.c:193:6:protocol_buffer_synchronize	8	static
 protocol.c:210:6:protocol_auto_cycle_start	8	static
 protocol.c:229:6:protocol_execute_realtime	8	static
 protocol.c:266:6:protocol_exec_rt_system	16	static
-protocol.c:560:13:protocol_exec_rt_suspend	24	static
-protocol.c:819:6:toggleFloodBit	8	static
-protocol.c:829:6:toggleMistBit	8	static
+protocol.c:565:13:protocol_exec_rt_suspend	24	static
+protocol.c:824:6:toggleFloodBit	8	static
+protocol.c:834:6:toggleMistBit	8	static
