@@ -66,8 +66,6 @@ void protocol_main_loop()
     // All systems go!
     system_execute_startup(line); // Execute startup script.
   }
-  //print_uint8_base2_ndigit(sys_rt_exec_alarm,8);    // added by MS to debug
-  //printString("before FOR\n");                      // added by MS to debug
   // ---------------------------------------------------------------------------------
   // Primary loop! Upon a system abort, this exits back to main() to reset the system.
   // This is also where Grbl idles while waiting for something to do.
@@ -164,22 +162,9 @@ void protocol_main_loop()
     // If there are no more characters in the serial read buffer to be processed and executed,
     // this indicates that g-code streaming has either filled the planner buffer or has
     // completed. In either case, auto-cycle start, if enabled, any queued moves.
-    //print_uint8_base2_ndigit(sys_rt_exec_alarm,8); // added by MS to debug
-    //printString("before auto cycle\n");            // added by MS to debug
-    //print_uint8_base2_ndigit(sys.abort,8); // added by MS to debug
-    //printString("< sys.abort\n");                 // added by MS to debug
     protocol_auto_cycle_start();
 
-    //print_uint8_base2_ndigit(sys_rt_exec_alarm,8);  // added by MS to debug
-    //printString("before exec realtime\n");          // added by MS to debug
-    //print_uint8_base2_ndigit(sys.abort,8); // added by MS to debug
-    //printString("< sys.abort\n");                 // added by MS to debug
     protocol_execute_realtime();  // Runtime command check point.
-
-    //print_uint8_base2_ndigit(sys_rt_exec_alarm,8); // added by MS to debug
-    //printString("before abort\n");                 // added by MS to debug
-    //print_uint8_base2_ndigit(sys.abort,8); // added by MS to debug
-    //printString("< sys.abort\n");                 // added by MS to debug
 
     if (sys.abort) { return; } // Bail to main() program loop to reset system.
   }
@@ -228,33 +213,10 @@ void protocol_auto_cycle_start()
 // limit switches, or the main program.
 void protocol_execute_realtime()
 {
-    //printString("before exec rt system: alarm=");                 // added by MS to debug
-	//print_uint8_base2_ndigit(sys_rt_exec_alarm,8); // added by MS to debug
-	//printString(" suspend=");                 // added by MS to debug
-	//print_uint8_base2_ndigit(sys.suspend ,8); // added by MS to debug
-	//printString(" sys.abort=");                 // added by MS to debug
-	//print_uint8_base2_ndigit(sys.abort,8); // added by MS to debug
-	//printString("\n");                     // added by MS to debug
-
 	protocol_exec_rt_system();
-
-	//printString("after exec rt system: alarm=");                 // added by MS to debug
-	//print_uint8_base2_ndigit(sys_rt_exec_alarm,8); // added by MS to debug
-	//printString(" suspend=");                 // added by MS to debug
-	//print_uint8_base2_ndigit(sys.suspend ,8); // added by MS to debug
-	//printString(" sys.abort=");                 // added by MS to debug
-	//print_uint8_base2_ndigit(sys.abort,8); // added by MS to debug
-	//printString("\n");                     // added by MS to debug
 
   if (sys.suspend) {
 	  protocol_exec_rt_suspend();
-	    //printString("after exec rt suspend: alarm=");                 // added by MS to debug
-	  	//print_uint8_base2_ndigit(sys_rt_exec_alarm,8); // added by MS to debug
-	  	//printString(" suspend=");                 // added by MS to debug
-	  	//print_uint8_base2_ndigit(sys.suspend ,8); // added by MS to debug
-	  	//printString(" sys.abort=");                 // added by MS to debug
-	  	//print_uint8_base2_ndigit(sys.abort,8); // added by MS to debug
-	  	//printString("\n");                     // added by MS to debug
 
   }
 }
@@ -267,12 +229,10 @@ void protocol_exec_rt_system()
 {
   uint8_t rt_exec; // Temp variable to avoid calling volatile multiple times.
   rt_exec = sys_rt_exec_alarm; // Copy volatile sys_rt_exec_alarm.
-  //print_uint8_base2_ndigit(rt_exec , 8); // added by ms to debug
   if (rt_exec) { // Enter only if any bit flag is true
     // System alarm. Everything has shutdown by something that has gone severely wrong. Report
     // the source of the error to the user. If critical, Grbl disables by entering an infinite
     // loop until system reset/abort.
-	//printString("line 272\n0");     // added by MS to debug
 	sys.state = STATE_ALARM; // Set system alarm state
     report_alarm_message(rt_exec);
     // Halt everything upon a critical event flag. Currently hard and soft limits flag this.
@@ -292,8 +252,6 @@ void protocol_exec_rt_system()
 
   rt_exec = sys_rt_exec_state; // Copy volatile sys_rt_exec_state.
   if (rt_exec) {
-	  //print_uint8_base2_ndigit(rt_exec ,8); // added by MS to debug
-	  //printString(" <sys_rt_exec_state line 292\n0");     // added by MS to debug
     // Execute system abort.
     if (rt_exec & EXEC_RESET) {
       sys.abort = true;  // Only place this is set true.
@@ -437,10 +395,6 @@ void protocol_exec_rt_system()
         // Motion complete. Includes CYCLE/JOG/HOMING states and jog cancel/motion cancel/soft limit events.
         // NOTE: Motion and jog cancel both immediately return to idle after the hold completes.
         if (sys.suspend & SUSPEND_JOG_CANCEL) {   // For jog cancel, flush buffers and sync positions.
-        	//print_uint8_base2_ndigit(sys_rt_exec_alarm,8);    // added by MS to debug
-        	printString("end of jog cancel\n");                      // added by MS to debug
-
-
 
         	sys.step_control = STEP_CONTROL_NORMAL_OP;
           plan_reset();
