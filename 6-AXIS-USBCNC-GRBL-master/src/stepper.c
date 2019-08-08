@@ -104,11 +104,16 @@ const PORTPINDEF limit_pin_mask[N_AXIS] =
 // NOTE: Current settings are set to overdrive the ISR to no more than 16kHz, balancing CPU overhead
 // and timer accuracy.  Do not alter these settings unless you know what you are doing.
 #ifdef ADAPTIVE_MULTI_AXIS_STEP_SMOOTHING
-	#define MAX_AMASS_LEVEL 3
+	//#define MAX_AMASS_LEVEL 3
+    #define MAX_AMASS_LEVEL 7 // changed by mstrens
 	// AMASS_LEVEL0: Normal operation. No AMASS. No upper cutoff frequency. Starts at LEVEL1 cutoff frequency.
 	#define AMASS_LEVEL1 (F_CPU/8000) // Over-drives ISR (x2). Defined as F_CPU/(Cutoff frequency in Hz)
 	#define AMASS_LEVEL2 (F_CPU/4000) // Over-drives ISR (x4)
 	#define AMASS_LEVEL3 (F_CPU/2000) // Over-drives ISR (x8)
+	#define AMASS_LEVEL4 (F_CPU/1000) // Added by mstrens
+	#define AMASS_LEVEL5 (F_CPU/500) //  Added by mstrens
+	#define AMASS_LEVEL6 (F_CPU/250) //  Added by mstrens
+	#define AMASS_LEVEL7 (F_CPU/125) //  Added by mstrens
 
   #if MAX_AMASS_LEVEL <= 0
     error "AMASS must have 1 or more levels to operate correctly."
@@ -1081,8 +1086,10 @@ void st_prep_buffer()
           // With AMASS enabled, simply bit-shift multiply all Bresenham data by the max AMASS
           // level, such that we never divide beyond the original data anywhere in the algorithm.
           // If the original data is divided, we can lose a step from integer roundoff.
-          for (idx=0; idx<N_AXIS; idx++) { st_prep_block->steps[idx] = pl_block->steps[idx] << MAX_AMASS_LEVEL; }
-          st_prep_block->step_event_count = pl_block->step_event_count << MAX_AMASS_LEVEL;
+          //for (idx=0; idx<N_AXIS; idx++) { st_prep_block->steps[idx] = pl_block->steps[idx] << MAX_AMASS_LEVEL; } // changed by mstrens with next one
+          //st_prep_block->step_event_count = pl_block->step_event_count << MAX_AMASS_LEVEL; // changed by mstrens with next one
+          for (idx=0; idx<N_AXIS; idx++) { st_prep_block->steps[idx] = pl_block->steps[idx] << (MAX_AMASS_LEVEL+1); }
+          st_prep_block->step_event_count = pl_block->step_event_count << (MAX_AMASS_LEVEL+1);
         #endif
 
         // Initialize segment buffer data for generating the segments.
@@ -1386,7 +1393,12 @@ void st_prep_buffer()
       else {
         if (cycles < AMASS_LEVEL2) { prep_segment->amass_level = 1; }
         else if (cycles < AMASS_LEVEL3) { prep_segment->amass_level = 2; }
-        else { prep_segment->amass_level = 3; }
+        else if (cycles < AMASS_LEVEL4) { prep_segment->amass_level = 3; } // added by mstrens
+        else if (cycles < AMASS_LEVEL5) { prep_segment->amass_level = 4; } // added by mstrens
+        else if (cycles < AMASS_LEVEL6) { prep_segment->amass_level = 5; } // added by mstrens
+        else if (cycles < AMASS_LEVEL7) { prep_segment->amass_level = 6; } // added by mstrens
+        //else { prep_segment->amass_level = 3; }
+        else { prep_segment->amass_level = 7; }                            // changed by mstrens
         cycles >>= prep_segment->amass_level;
         prep_segment->n_step <<= prep_segment->amass_level;
       }
