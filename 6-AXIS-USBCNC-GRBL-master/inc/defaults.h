@@ -529,11 +529,11 @@
 #endif
 
 #ifdef ABC_AXIS_EXAMPLE
-		#define DEFAULT_X_STEPS_PER_MM 120.0f					// X axis step per mm // 400
-		#define DEFAULT_Y_STEPS_PER_MM 120.0f					// Y axis step per mm
-		#define DEFAULT_Z_STEPS_PER_MM 120.0f					// Z axis step per mm
+		#define DEFAULT_X_STEPS_PER_MM 60.0f					// X axis step per mm
+		#define DEFAULT_Y_STEPS_PER_MM 60.0f					// Y axis step per mm
+		#define DEFAULT_Z_STEPS_PER_MM 400.0f					// Z axis step per mm
 #if defined(AA_AXIS) || defined(AB_AXIS) || defined(ABC_AXIS)
-		#define DEFAULT_A_STEPS_PER_MM 5120.0f					// A axis step per mm
+		#define DEFAULT_A_STEPS_PER_MM 200.0f					// A axis step per mm
 #endif
 #if defined(AB_AXIS) || defined(ABC_AXIS)
 		#define DEFAULT_B_STEPS_PER_MM 5120.0f					// B axis step per mm
@@ -541,9 +541,9 @@
 #if defined(ABC_AXIS)
 		#define DEFAULT_C_STEPS_PER_MM 5120.0f					// C axis step per mm
 #endif
-		#define DEFAULT_X_MAX_RATE 2000.0f 						// X axis mm/min // 600
-		#define DEFAULT_Y_MAX_RATE 2000.0f 						// Y axis mm/min
-		#define DEFAULT_Z_MAX_RATE 2000.0f 						// Z axis mm/min
+		#define DEFAULT_X_MAX_RATE 2500.0f 						// X axis mm/min
+		#define DEFAULT_Y_MAX_RATE 2500.0f 						// Y axis mm/min
+		#define DEFAULT_Z_MAX_RATE 500.0f 						// Z axis mm/min
 #if defined(AA_AXIS) || defined(AB_AXIS) || defined(ABC_AXIS)
 		#define DEFAULT_A_MAX_RATE 2000.0f 						// A axis mm/min
 #endif
@@ -553,9 +553,9 @@
 #if defined(ABC_AXIS)
 		#define DEFAULT_C_MAX_RATE 2000.0f 						// C axis mm/min
 #endif
-		#define DEFAULT_X_ACCELERATION (400.0f) 			// X axis 10*60*60 mm/min^2 = 10 mm/sec^2 // 45
-		#define DEFAULT_Y_ACCELERATION (400.0f) 			// Y axis 10*60*60 mm/min^2 = 10 mm/sec^2
-		#define DEFAULT_Z_ACCELERATION (400.0f) 			// Z axis 10*60*60 mm/min^2 = 10 mm/sec^2
+		#define DEFAULT_X_ACCELERATION (80.0f*60*60) 			// X axis 10*60*60 mm/min^2 = 10 mm/sec^2
+		#define DEFAULT_Y_ACCELERATION (80.0f*60*60) 			// Y axis 10*60*60 mm/min^2 = 10 mm/sec^2
+		#define DEFAULT_Z_ACCELERATION (50.0f*60*60) 			// Z axis 10*60*60 mm/min^2 = 10 mm/sec^2
 #if defined(AA_AXIS) || defined(AB_AXIS) || defined(ABC_AXIS)
 		#define DEFAULT_A_ACCELERATION (8000.0f*60*60) 			// A axis 10*60*60 mm/min^2 = 10 mm/sec^2
 #endif
@@ -565,9 +565,9 @@
 #if defined(ABC_AXIS)
 		#define DEFAULT_C_ACCELERATION (8000.0f*60*60) 			// C axis 10*60*60 mm/min^2 = 10 mm/sec^2
 #endif
-		#define DEFAULT_X_MAX_TRAVEL 280.0f 					// X axis mm
-		#define DEFAULT_Y_MAX_TRAVEL 280.0f 					// Y axis mm
-		#define DEFAULT_Z_MAX_TRAVEL 280.0f 					// Z axis mm
+		#define DEFAULT_X_MAX_TRAVEL 540.0f 					// X axis mm
+		#define DEFAULT_Y_MAX_TRAVEL 570.0f 					// Y axis mm
+		#define DEFAULT_Z_MAX_TRAVEL 80.0f 					    // Z axis mm
 #if defined(AA_AXIS) || defined(AB_AXIS) || defined(ABC_AXIS)
 		#define DEFAULT_A_MAX_TRAVEL 280.0f 					// A axis mm
 #endif
@@ -582,23 +582,23 @@
 		#define DEFAULT_STEP_PULSE_MICROSECONDS 6 				// usec
 		#define DEFAULT_STEPPING_INVERT_MASK 0x0
 		#define DEFAULT_DIRECTION_INVERT_MASK 0x1F
-		#define DEFAULT_STEPPER_IDLE_LOCK_TIME 0 				// msec (0-254, 255 keeps steppers enabled)
-		#define DEFAULT_STATUS_REPORT_MASK 0 					// 1 - MPos enabled, 0 - WPos enabled
+		#define DEFAULT_STEPPER_IDLE_LOCK_TIME 0				// msec (0-254, 255 keeps steppers enabled)
+		#define DEFAULT_STATUS_REPORT_MASK 3 					// 1 - MPos enabled, 0 - WPos enabled
 		#define DEFAULT_JUNCTION_DEVIATION 0.01f 				// mm
 		#define DEFAULT_ARC_TOLERANCE 0.002f 					// mm
 		#define DEFAULT_REPORT_INCHES 0
-		#define DEFAULT_INVERT_ST_ENABLE 1
+		#define DEFAULT_INVERT_ST_ENABLE 0
 		#define DEFAULT_INVERT_LIMIT_PINS 1
 		#define DEFAULT_SOFT_LIMIT_ENABLE 0
 		#define DEFAULT_HARD_LIMIT_ENABLE 1
 		#define DEFAULT_INVERT_PROBE_PIN 0
 		#define DEFAULT_LASER_MODE 0
-		#define DEFAULT_HOMING_ENABLE 0
-		#define DEFAULT_HOMING_DIR_MASK 0x1f
-		#define DEFAULT_HOMING_FEED_RATE 10.0f 					// mm/min
-		#define DEFAULT_HOMING_SEEK_RATE 100.0f 				// mm/min
+		#define DEFAULT_HOMING_ENABLE 1
+		#define DEFAULT_HOMING_DIR_MASK 3
+		#define DEFAULT_HOMING_FEED_RATE 100.0f 					// mm/min
+		#define DEFAULT_HOMING_SEEK_RATE 500.0f 				// mm/min
 		#define DEFAULT_HOMING_DEBOUNCE_DELAY 250 				// msec (0-65k)
-		#define DEFAULT_HOMING_PULLOFF 1.5f 					// mm
+		#define DEFAULT_HOMING_PULLOFF 2.0f 					// mm
 #endif
 
 #endif

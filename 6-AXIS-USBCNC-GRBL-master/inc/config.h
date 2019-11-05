@@ -276,6 +276,10 @@
 // uncomment the config option USE_SPINDLE_DIR_AS_ENABLE_PIN below.
 //#define INVERT_SPINDLE_ENABLE_PIN // Default disabled. Uncomment to enable.
 
+// added by MS in order to allow to invert the PWM signal
+// uncomment to invert PWM signal (it is implemented only for STM32F103 board.
+#define INVERT_SPINDLE_PWM
+
 // Inverts the selected coolant pin from low-disabled/high-enabled to low-enabled/high-disabled. Useful
 // for some pre-built electronic boards.
 // #define INVERT_COOLANT_FLOOD_PIN // Default disabled. Uncomment to enable.

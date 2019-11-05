@@ -84,14 +84,19 @@ void spindle_init()
   timerInitStructure.TIM_RepetitionCounter = 0;
   TIM_TimeBaseInit(TIM1, &timerInitStructure);
 
+
   outputChannelInit.TIM_OCMode = TIM_OCMode_PWM1;
   outputChannelInit.TIM_Pulse = 0;     // initi speed is 0
   outputChannelInit.TIM_OutputState = TIM_OutputState_Enable;
+#ifdef INVERT_SPINDLE_PWM
+  outputChannelInit.TIM_OCPolarity = TIM_OCPolarity_Low;
+#else
   outputChannelInit.TIM_OCPolarity = TIM_OCPolarity_High;
-
+#endif
   TIM_OC1Init(TIM1, &outputChannelInit);
   TIM_OC1PreloadConfig(TIM1, TIM_OCPreload_Enable);
-  TIM_CtrlPWMOutputs(TIM1, DISABLE);
+  TIM_CtrlPWMOutputs(TIM1, DISABLE); // MS in fact with my modification to support INVERT PWM, it will be ENABLE in spindle_stop()
+                                     // perhaps it could be always enabled but I expect this should work too.
   TIM_Cmd(TIM1, ENABLE);
 
   RCC_APB2PeriphClockCmd(RCC_SPINDLE_PWM_PORT, ENABLE);
@@ -99,6 +104,11 @@ void spindle_init()
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
   GPIO_InitStructure.GPIO_Pin = 1 << SPINDLE_PWM_BIT;
   GPIO_Init(SPINDLE_PWM_PORT, &GPIO_InitStructure);
+//#ifdef INVERT_SPINDLE_PWM
+//  SPINDLE_PWM_PORT->ODR = ( SPINDLE_PWM_PORT->ODR & ~(1<SPINDLE_PWM_BIT) ) | (1<SPINDLE_PWM_BIT) ;
+  // MS to check if this help to get a level HIGH on PWM pin when PWM is disabled (in case of option invert PWM is selected
+  // perhaps the level has to be forced with also disabling the output on channel 1 of timer 1??
+//#endif
 #endif
 #endif
 
@@ -192,8 +202,10 @@ void spindle_stop()
 
 #if defined (STM32F103C8)
 	#ifdef VARIABLE_SPINDLE
-    TIM_CtrlPWMOutputs(TIM1, DISABLE);
-	#endif
+    //TIM_CtrlPWMOutputs(TIM1, DISABLE);  // removed by MS
+      TIM1->CCR1 = 0; // added by MS
+      TIM_CtrlPWMOutputs(TIM1, ENABLE); // better to ENABLE with a CCR1 value of 0, so the signal is OK even when INVERT_PWM
+    #endif
     #ifdef USE_SPINDLE_ENABLE_PIN
       #ifdef INVERT_SPINDLE_ENABLE_PIN
         SetSpindleEnablebit();
@@ -240,7 +252,9 @@ void spindle_stop()
 				SPINDLE_TCCRA_REGISTER &= ~(1 << SPINDLE_COMB_BIT); // Disable PWM. Output voltage is zero.
 			#endif
 			#if defined (STM32F103C8)
-				TIM_CtrlPWMOutputs(TIM1, DISABLE);
+				//TIM_CtrlPWMOutputs(TIM1, DISABLE); // removed by MS
+				// MS : keep PWM Enable, so even the INVERT_PWM level is good
+				TIM1->CCR1 = 0; // added by MS So even in INVERT PWM mode, level is good
 			#endif
 			} else {
 			#ifdef AVRTARGET
