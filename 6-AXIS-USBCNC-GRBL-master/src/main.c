@@ -104,7 +104,7 @@ int main(void)
 #endif
 	//Set_System();
 #ifndef USEUSB
-	USART1_Configuration(115200);
+	USART1_Configuration(BAUD_RATE);
 #else
 	Set_USBClock();
 	USB_Interrupts_Config();

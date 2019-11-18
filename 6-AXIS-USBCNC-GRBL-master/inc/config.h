@@ -87,7 +87,6 @@
 // ---
 
 // Serial baud rate
-// #define BAUD_RATE 230400
 #define BAUD_RATE 115200
 
 // Define realtime command special characters. These characters are 'picked-off' directly from the

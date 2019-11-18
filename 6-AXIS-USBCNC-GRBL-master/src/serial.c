@@ -47,8 +47,8 @@ extern volatile uint8_t tx_restart;
 #define RX_RING_BUFFER (RX_BUFFER_SIZE+1)
 #define TX_RING_BUFFER (TX_BUFFER_SIZE+1)
 #else
-#define RX_RING_BUFFER (RX_BUFFER_SIZE)
-#define TX_RING_BUFFER (TX_BUFFER_SIZE)
+#define RX_RING_BUFFER (RX_BUFFER_SIZE+1)  // +1 added by MS
+#define TX_RING_BUFFER (TX_BUFFER_SIZE+1)  // +1 added by MS
 #endif
 
 uint8_t serial_rx_buffer[RX_RING_BUFFER];
@@ -65,12 +65,20 @@ volatile uint8_t serial_tx_buffer_tail = 0;
 
 
 
+
 // Returns the number of bytes available in the RX serial buffer.
 uint8_t serial_get_rx_buffer_available()
 {
-  uint8_t rtail = serial_rx_buffer_tail; // Copy to limit multiple calls to volatile
-  if (serial_rx_buffer_head >= rtail) { return(RX_BUFFER_SIZE - (serial_rx_buffer_head-rtail)); }
-  return((rtail-serial_rx_buffer_head-1));
+  // original GRBL code
+	//uint8_t rtail = serial_rx_buffer_tail; // Copy to limit multiple calls to volatile
+  //if (serial_rx_buffer_head >= rtail) { return(RX_BUFFER_SIZE - (serial_rx_buffer_head-rtail)); }
+  //return((rtail-serial_rx_buffer_head-1));
+// modified by MS
+	//uint8_t rtail = serial_rx_buffer_tail ; // Copy to limit multiple calls to volatile
+	int16_t freeSpace ;
+	freeSpace = ((int16_t) serial_rx_buffer_tail) -  ( ( int16_t) serial_rx_buffer_head )  ;
+	if (freeSpace <= 0)  { freeSpace += RX_RING_BUFFER; }
+	return( (uint8_t) freeSpace - 1);
 }
 
 
@@ -86,13 +94,13 @@ uint8_t serial_get_rx_buffer_count()
 
 // Returns the number of bytes used in the TX serial buffer.
 // NOTE: Not used except for debugging and ensuring no TX bottlenecks.
-uint8_t serial_get_tx_buffer_count()
-{
-  uint8_t ttail = serial_tx_buffer_tail; // Copy to limit multiple calls to volatile
-  if (serial_tx_buffer_head >= ttail) { return(serial_tx_buffer_head-ttail); }
-  return (TX_RING_BUFFER - (ttail-serial_tx_buffer_head));
-}
-
+//uint8_t serial_get_tx_buffer_count()
+//{
+//  uint8_t ttail = serial_tx_buffer_tail; // Copy to limit multiple calls to volatile
+//  if (serial_tx_buffer_head >= ttail) { return(serial_tx_buffer_head-ttail); }
+//  return (TX_RING_BUFFER - (ttail-serial_tx_buffer_head));
+//}
+// MS : noot sure that this is correct.
 
 
 void serial_init()
@@ -187,7 +195,7 @@ void serial_write(uint8_t data) {
 //    return;                                    // remove by MS because we try to use interrupt
 #endif
 #endif
-  if (next_head == TX_RING_BUFFER) { next_head = 0; }
+  if (next_head >= TX_RING_BUFFER) { next_head = 0; }
 
   // Wait until there is space in the buffer
   while (next_head == serial_tx_buffer_tail) {
@@ -304,7 +312,8 @@ uint8_t serial_read()
     uint8_t data = serial_rx_buffer[tail];
 
     tail++;
-    if (tail == RX_RING_BUFFER) { tail = 0; }
+    //if (tail == RX_RING_BUFFER) { tail = 0; }   // removed by MS it was
+    if (tail >= RX_RING_BUFFER) { tail = 0; } // added by MS
     serial_rx_buffer_tail = tail;
 
     return data;
@@ -358,12 +367,17 @@ void storeHandleDataIn(uint8_t data){
         // Throw away any unfound extended-ASCII character by not passing it to the serial buffer.
       } else { // Write character to buffer
         next_head = serial_rx_buffer_head + 1;
-        if (next_head == RX_RING_BUFFER) { next_head = 0; }
+        //if (next_head == RX_RING_BUFFER) { next_head = 0; }
+        if (next_head >= RX_RING_BUFFER) { next_head = 0; }
 
-        // Write data to buffer unless it is full.
+
+        // Write data to buffer unless it is full. Take care: if buffer is full, then car is lost
         if (next_head != serial_rx_buffer_tail) {
           serial_rx_buffer[serial_rx_buffer_head] = data;
           serial_rx_buffer_head = next_head;
+        } else {             // added by MS to get a breakpunt
+        	next_head++;     //just do nothing but allow a break punt
+        	next_head--;
         }
       }
   }
@@ -433,25 +447,25 @@ void OnUsbDataRx(uint8_t* dataIn, uint8_t length)
  *----------------------------------------------------------------------------*/
 void USART1_IRQHandler (void) 
 {
-    volatile unsigned int IIR;
+    //volatile unsigned int IIR;
     uint8_t data;
     uint8_t tail;
 
-    IIR = USART1->SR;
-    if (IIR & USART_FLAG_RXNE) 
+    //IIR = USART1->SR;
+    if (USART1->SR & USART_FLAG_RXNE) // changed by MS : it was IIR & USART_FLAG_RXNE
     {                  // read interrupt
         data = USART1->DR & 0x1FF;
         storeHandleDataIn(data);
-        USART1->SR &= ~USART_FLAG_RXNE;	          // clear interrupt
+        //USART1->SR = ~USART_FLAG_RXNE;	          // clear interrupt ; changed by MS, it is normally cleared automatically by reading the DR register
     }
 
-    if (IIR & USART_FLAG_TXE) {
-          USART1->SR &= ~USART_FLAG_TXE;	          // clear interrupt
+    if (USART1->SR  & USART_FLAG_TXE) {  // changed by MS : it was IIR & USART_FLAG_TXE
+          USART1->SR = ~USART_FLAG_TXE;	          // clear interrupt
           tail = serial_tx_buffer_tail;
           if (tail != serial_tx_buffer_head) {  // if there is at least one byte to send; take it from the buffer and
         	  USART1->DR = serial_tx_buffer[tail];
         	  tail++;
-        	  if ( tail == TX_BUFFER_SIZE) { tail = 0;  }
+        	  if ( tail >= TX_RING_BUFFER) { tail = 0;  }
         	  serial_tx_buffer_tail = tail;
         	  tx_restart = 0;
           }
@@ -470,6 +484,11 @@ void USART1_IRQHandler (void)
 //          else {
 //            tx_restart = 1;
 //    		USART1->CR1 &= ~USART_FLAG_TXE;		      // disable TX interrupt if nothing to send
+// here another example
+
+
+
+
     } // end of sending
 }     // end of interrupt
 #endif  // end of else of USEUSB
