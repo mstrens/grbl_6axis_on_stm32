@@ -221,10 +221,11 @@ void serial_write(uint8_t data) {
 #endif
 #ifdef STM32F103C8                   // added by MS
 #ifndef USEUSB                       // added by MS
-  if (tx_restart) {                 // added by MS              // If transmit interrupt is disabled, enable it
-      tx_restart = 0;                // added by MS
-  	USART1->CR1 |= USART_FLAG_TXE;   // added by MS		          // enable TX interrupt
-    }                                // added by MS
+  //if (tx_restart) {                 // added by MS              // If transmit interrupt is disabled, enable it
+  //    tx_restart = 0;                // added by MS
+  //	USART1->CR1 |= USART_FLAG_TXE;   // added by MS		          // enable TX interrupt// added by MS
+  //  }
+  USART1->CR1 |= USART_FLAG_TXE;   // added by MS		          // enable TX interrupt// it seems it is safier to do it in all cases
 #endif                               // added by MS
 #endif                               // added by MS
 }
@@ -460,18 +461,19 @@ void USART1_IRQHandler (void)
     }
 
     if (USART1->SR  & USART_FLAG_TXE) {  // changed by MS : it was IIR & USART_FLAG_TXE
-          USART1->SR = ~USART_FLAG_TXE;	          // clear interrupt
           tail = serial_tx_buffer_tail;
           if (tail != serial_tx_buffer_head) {  // if there is at least one byte to send; take it from the buffer and
-        	  USART1->DR = serial_tx_buffer[tail];
+        	  USART1->DR = serial_tx_buffer[tail];  // this clear the interrupt.
         	  tail++;
         	  if ( tail >= TX_RING_BUFFER) { tail = 0;  }
         	  serial_tx_buffer_tail = tail;
-        	  tx_restart = 0;
+        	  //tx_restart = 0;
           }
           else {
-        	  tx_restart = 1;
+        	  //tx_restart = 1;
+
         	  USART1->CR1 &= ~USART_FLAG_TXE;		      // disable TX interrupt if nothing to send
+        	  USART1->SR = ~USART_FLAG_TXE;	          // clear interrupt
           }
 // here an extract from an example
 //          p = &tbuf;

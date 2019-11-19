@@ -2,7 +2,7 @@ serial.c:70:9:serial_get_rx_buffer_available	16	static
 serial.c:87:9:serial_get_rx_buffer_count	16	static
 serial.c:106:6:serial_init	4	static
 serial.c:188:6:serial_write	24	static
-serial.c:306:9:serial_read	16	static
-serial.c:325:6:storeHandleDataIn	24	static
-serial.c:448:6:USART1_IRQHandler	16	static
-serial.c:497:6:serial_reset_read_buffer	4	static
+serial.c:307:9:serial_read	16	static
+serial.c:326:6:storeHandleDataIn	24	static
+serial.c:449:6:USART1_IRQHandler	16	static
+serial.c:499:6:serial_reset_read_buffer	4	static

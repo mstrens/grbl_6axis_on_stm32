@@ -37,7 +37,7 @@
 #define RX_BUFFER_SIZE 254
 
 #ifndef WIN32
-#define TX_BUFFER_SIZE 128	// Do not try 256 it will not work for STM32.
+#define TX_BUFFER_SIZE 127	// Do not try 256 it will not work for STM32 max is 254 because it is UINT8 and we add .
 #else
 #define TX_BUFFER_SIZE 254
 #endif
@@ -51,7 +51,7 @@ void winserial_init(char *pPort);
 
 // there are no corrupted lines with this changes
 // also changed in usb_endp.c
-#define USB_CHANGED_DEBUG //by  Sombat4t (https://github.com/usbcnc/grbl/issues/46)
+//#define USB_CHANGED_DEBUG //by  Sombat4t (https://github.com/usbcnc/grbl/issues/46) // put as comment by MS
 
 #ifdef USB_CHANGED_DEBUG
 extern volatile uint8_t txUsbLock;
