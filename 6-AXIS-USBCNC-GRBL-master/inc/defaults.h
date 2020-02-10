@@ -582,7 +582,7 @@
 		#define DEFAULT_STEP_PULSE_MICROSECONDS 6 				// usec
 		#define DEFAULT_STEPPING_INVERT_MASK 0x0
 		#define DEFAULT_DIRECTION_INVERT_MASK 0x1F
-		#define DEFAULT_STEPPER_IDLE_LOCK_TIME 0				// msec (0-254, 255 keeps steppers enabled)
+		#define DEFAULT_STEPPER_IDLE_LOCK_TIME 255				// msec (0-254, 255 keeps steppers enabled)
 		#define DEFAULT_STATUS_REPORT_MASK 3 					// 1 - MPos enabled, 0 - WPos enabled
 		#define DEFAULT_JUNCTION_DEVIATION 0.01f 				// mm
 		#define DEFAULT_ARC_TOLERANCE 0.002f 					// mm

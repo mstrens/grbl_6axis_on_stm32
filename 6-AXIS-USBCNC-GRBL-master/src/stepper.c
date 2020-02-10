@@ -161,7 +161,8 @@ typedef struct {
     uint8_t prescaler;      // Without AMASS, a prescaler is required to adjust for slow timing.
   #endif
   #ifdef VARIABLE_SPINDLE
-    uint8_t spindle_pwm;
+    //uint8_t spindle_pwm; replaced by mstrens for STM32 by next line
+    SPINDLE_PWM_TYPE spindle_pwm;  // SPINDLE_PWM_TYPE is Uint16_t for STM32 and uint8_t for AVR
   #endif
 } segment_t;
 static segment_t segment_buffer[SEGMENT_BUFFER_SIZE];
@@ -256,7 +257,8 @@ typedef struct {
 
   #ifdef VARIABLE_SPINDLE
     float inv_rate;    // Used by PWM laser mode to speed up segment calculations.
-    uint8_t current_spindle_pwm;
+    //uint8_t current_spindle_pwm; // replaced by mstrens by next line for STM32
+    SPINDLE_PWM_TYPE current_spindle_pwm; // for STM32 SPINDLE_PWM_TYPE must be uint16_t
   #endif
 } st_prep_t;
 static st_prep_t prep;
